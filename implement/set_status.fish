@@ -20,7 +20,7 @@ end
 
 set _name $argv[1]
 set _status $argv[2]
-set _time (date +%m-%d_%H:%M:%S)
+set _time (date '+%Y-%m-%d %H:%M:%S')
 
 set _size (./_getsize.sh $_name)
 set _upstream (./_getupstream.sh $_name)
