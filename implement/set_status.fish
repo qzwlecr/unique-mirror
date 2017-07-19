@@ -25,7 +25,7 @@ set _time (date +%m-%d_%H:%M:%S)
 set _size (./_getsize.sh $_name)
 set _upstream (./_getupstream.sh $_name)
 
-set _path './testdat' #'/home/www/mirrors/.status'
+set _path '/home/www/mirrors/.status'
 
 cat $_path | grep -v "^$_name " > $_path.tmp
 echo "$_name $_time $_upstream $_status $_size" >> $_path.tmp
