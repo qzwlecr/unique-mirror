@@ -18,14 +18,17 @@ if [ $_arg_len != '2' ]
         _usage
 end
 
-set name $argv[1]
+set _name $argv[1]
 set _status $argv[2]
-set time (date +%m-%d_%H:%M:%S) 
+set _time (date +%m-%d_%H:%M:%S)
 
-set _path '/home/www/mirrors/.status'
+set _size (./_getsize.sh $_name)
+set _upstream (./_getupstream.sh $_name)
 
-cat $_path | grep -v "^$name " > $_path.tmp
-echo "$name $time $_status" >> $_path.tmp
+set _path './testdat' #'/home/www/mirrors/.status'
+
+cat $_path | grep -v "^$_name " > $_path.tmp
+echo "$_name $_time $_upstream $_status $_size" >> $_path.tmp
 cat $_path.tmp | sort > $_path
 rm $_path.tmp
 
