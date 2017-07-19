@@ -26,6 +26,11 @@ if [ "$1" == "" ]; then
     exit 4
 fi
 
+if whoami | grep -v '^root$' > /dev/null; then
+    echo 'Permission denied.'
+    exit 4
+fi
+
 if [ ! -f config/$1.conf ]; then
     echo 'Can not find config file.'
     exit 4
