@@ -34,9 +34,9 @@ delete-packages = true
 
 [statistics]
 access-log-pattern = /var/log/nginx/*.pypi.python.org*access*
-" > bandersnatch_config.conf
+" > /tmp/.bandersnatch_config.conf
 
-timeout $3 bandersnatch -c bandersnatch_config.conf mirror
+timeout $3 bandersnatch -c /tmp/.bandersnatch_config.conf mirror
 
 if [ $? -eq 124 ]
 then
