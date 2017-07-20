@@ -39,6 +39,20 @@ fi
 source config/$1.conf
 _name=$1
 
+if [ $_initok -eq 0 ]; then
+    echo 'This is initial pull without timeout limitation.'
+    _timeout='30d'
+    _msg_syncing='Initing'
+    _msg_success='Initing(wait)'
+    _msg_failed='Initing(timeout)'
+    _msg_error='InitError'
+else
+    _msg_success='Success'
+    _msg_syncing='Syncing'
+    _msg_failed='Failed'
+    _msg_error='Error'
+fi
+
 cd implement
 ./lockmgr.sh acquire $_name
 if [ $? -ne 0 ]
@@ -47,7 +61,8 @@ then
     exit 1
 fi
 
-./set_status.fish $_name Syncing
+
+./set_status.fish $_name $_msg_syncing
 
 _shToUse="$_synctool.sh"
 ./$_shToUse $_url $_localpath $_timeout $_initgit
@@ -55,12 +70,12 @@ _ret=$?
 
 if [ $_ret -eq 0 ]; then
     echo 'Succeeded.'
-    ./set_status.fish $_name Success
+    ./set_status.fish $_name $_msg_success
 elif [ $_ret -eq 2 ]; then
     echo 'Sync failed. Maybe timed out.'
-    ./set_status.fish $_name Failed
+    ./set_status.fish $_name $_msg_failed
 else
-    ./set_status.fish $_name Error
+    ./set_status.fish $_name $_msg_error
 fi
 
 ./lockmgr.sh release $_name
