@@ -26,24 +26,42 @@ def responceToList(respStr):
             continue
         if line[9:endpos] == '..':
             continue
-        returnStr.append(line[9:endpos])
+        url=line[9:endpos]
+
+        line=line[::-1]
+        endpos = line.find(' ')
+        if endpos == -1:
+            continue
+        size_reversed=line[0:endpos]
+        if size_reversed[0] == '\r':
+            size_reversed=size_reversed[1:]
+        size=int(size_reversed[::-1])
+
+        returnStr.append((url, size))
     print(returnStr)
     return returnStr
 
-def wget(url, localpath):
+def wget(url, localpath, remotesize):
     # url and localpath must be absolute.
+    try:
+        if os.path.getsize(localpath) == remotesize:
+            print('Skip', url, 'at', localpath)
+            return
+    except OSError:
+
     print('Processing', url)
-    subprocess.run(["wget", "-O", localpath, url], stderr=subprocess.PIPE).check_returncode()
+    subprocess.run(["wget", "-N", "-O", localpath, url], stderr=subprocess.PIPE).check_returncode()
 
 def downloadDir(url):
     os.system("mkdir -p " + baselocalpath+url)
     with urllib.request.urlopen(baseurl+url) as f:
         targetArr = responceToList(f.read().decode("utf-8"))
     isdir = lambda t: t[-1] == '/'
-    for target in targetArr:
+    for targetTup in targetArr:
+        target, size = targetTup
         if isdir(target):
             downloadDir(url + target)
         else:
-            wget(baseurl+url+target, baselocalpath+url+target)
+            wget(baseurl+url+target, baselocalpath+url+target, size)
 
 downloadDir('')
