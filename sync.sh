@@ -61,12 +61,13 @@ then
     exit 1
 fi
 
-
 ./set_status.fish $_name $_msg_syncing
 
+$_pre_sync
 _shToUse="$_synctool.sh"
 ./$_shToUse $_url $_localpath $_timeout $_initgit
 _ret=$?
+$_post_sync
 
 if [ $_ret -eq 0 ]; then
     echo 'Succeeded.'
