@@ -9,7 +9,7 @@ function _usage () {
     Usage: bandersnatch.sh <http(s)://url> <targetLoaclPath> <timeout>
     Example: ./bandersnatch.sh 'https://pypi.python.org' /mnt/raid0/pypi 4h
 
-    I'll return 0 on success, return 1 on syntax error, and return 2 on timeout(failure).
+    I'll return 0 on success, return 1 on syntax error, else on generic failure.
 
 EOF
 }
@@ -37,10 +37,10 @@ access-log-pattern = /var/log/nginx/*.pypi.python.org*access*
 " > /tmp/.bandersnatch_config.conf
 
 timeout $3 bandersnatch -c /tmp/.bandersnatch_config.conf mirror
-
-if [ $? -eq 124 ]
+retval=$?
+if [ $retval -ne 0 ]
 then
-    exit 2
+    exit $retval
 else
     ############Something must be done on finishing the first command.
 	todoFile=$2/todo
@@ -49,7 +49,7 @@ else
 		lineCount=`wc -l $todoFile | grep -E '[[:digit:]]+' -o`
 		if [ $lineCount -ne 0 ]
 		then
-            exit 2
+            exit $retval
 		else
             exit 0
 		fi

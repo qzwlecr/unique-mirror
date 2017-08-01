@@ -10,7 +10,7 @@ function _usage () {
     Example: ./git.sh 'git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git' /mnt/raid0/linux 4h
     New repo: ./git.sh 'git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git' /mnt/raid0/linux 4h initrepo
     
-    I'll return 0 on success, return 1 on syntax error, and return 2 on timeout(failure).
+    I'll return 0 on success, return 1 on syntax error, else on general failure.
 
 EOF
 }
@@ -29,12 +29,7 @@ fi
 
 cd $2
 timeout $3 git remote -v update
-returnVal=$?
+retval=$?
 cd -
 
-if [ $returnVal -eq 124 ]
-then
-    exit 2
-else
-    exit 0
-fi
+exit $retval

@@ -12,8 +12,8 @@ function _usage () {
     Sample config files are located in ./config/examples/*.conf.
 
     I'll return 4 if configuration file aren't there, or there's a syntax error.
-    Return 2 if sync timed out.
-    Return 1 if any other error are detected, on which I'll print what happened to stdout.
+    Return 124 if sync timed out.
+    Else if any other error are detected, on which I'll print what happened to stdout.
 
     ***** Warn: Please run me in my directory. (I'll use cd without ANY check).
                 I'll fix it in the future if necessary.
@@ -72,11 +72,12 @@ $_post_sync
 if [ $_ret -eq 0 ]; then
     echo 'Succeeded.'
     ./set_status.fish $_name $_msg_success
-elif [ $_ret -eq 2 ]; then
-    echo 'Sync failed. Maybe timed out.'
+elif [ $_ret -eq 124 ]; then
+    echo 'Sync failed because of timing out.'
     ./set_status.fish $_name $_msg_failed
 else
-    ./set_status.fish $_name $_msg_error
+    echo 'Sync failed on unknown error '"($_ret)."
+    ./set_status.fish $_name "$_msg_error($_ret)"
 fi
 
 ./lockmgr.sh release $_name

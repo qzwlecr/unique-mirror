@@ -8,7 +8,7 @@ function _usage () {
     Usage: wget.sh <http(s)://url> <targetLoaclPath> <timeout>
     Example: ./wget.sh 'https://mirrors.tuna.tsinghua.edu.cn/archlinux/' '/mnt/raid0/archlinux' 4h
 
-    I'll return 0 on success, return 1 on syntax error, and return 2 on timeout(failure).
+    I'll return 0 on success, return 1 on syntax error, else on generic failure.
 
 EOF
 }
@@ -38,9 +38,4 @@ _url=`fixlastchar $1`
 mkdir $2 > /dev/null 2>&1
 timeout $3 ./wget-r.py $_url $_local
 
-if [ $? -eq 124 ]
-then
-    exit 2
-else
-    exit 0
-fi
+exit $?

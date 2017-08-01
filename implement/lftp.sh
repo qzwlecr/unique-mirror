@@ -7,7 +7,7 @@ function _usage () {
     Usage: lftp.sh <http(s)://url> <targetLoaclPath> <timeout>
     Example: ./lftp.sh 'http://repo.msys2.org' /mnt/raid0/msys2 4h
 
-    I'll return 0 on success, return 1 on syntax error, and return 2 on timeout(failure).
+    I'll return 0 on success, return 1 on syntax error, else on general failure.
 
 EOF
 }
@@ -21,12 +21,7 @@ fi
 mkdir $2 > /dev/null 2>&1
 cd $2
 timeout $3 lftp "$1" -e "mirror --verbose -P 5 --delete; bye"
-returnVal=$?
+retval=$?
 cd -
 
-if [ $returnVal -eq 124 ]
-then
-    exit 2
-else
-    exit 0
-fi
+exit $retval
