@@ -40,4 +40,6 @@ ln -s /mnt/raid0/$1 /home/www/mirrors/$1
 cp $_samp $_cfg
 vim $_cfg
 
+cat "Disallow: /$1" >> /home/www/mirrors/robots.txt
+
 echo 'Done.'
