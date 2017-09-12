@@ -19,6 +19,6 @@ then
 fi
 
 mkdir $2 > /dev/null 2>&1
-timeout $3 rsync --bwlimit=15000 --size-only --verbose --recursive --update --links --hard-links --safe-links --perms --times --delete-after --progress --human-readable $1 $2
+timeout $3 rsync --bwlimit=1500 --size-only --verbose --recursive --update --links --hard-links --safe-links --perms --times --delete-after --progress --human-readable $1 $2
 
 exit $?
