@@ -35,6 +35,7 @@ if [ -f $_cfg ]; then
     exit 2
 fi
 
+echo 'Tip: I`m assuming _localsource == /mnt/raid0/name. If it`s not right, just do mkdir and ln-s by hand, that`s ok.'
 mkdir /mnt/raid0/$1
 ln -s /mnt/raid0/$1 /home/www/mirrors/$1
 cp $_samp $_cfg
