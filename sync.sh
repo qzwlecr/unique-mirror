@@ -65,7 +65,9 @@ fi
 
 $_pre_sync
 _shToUse="$_synctool.sh"
-./$_shToUse $_url $_localpath $_timeout $_initgit
+[[ $_custom_sync_cmd == '' ]] && 
+    ./$_shToUse $_url $_localpath $_timeout $_initgit ||
+    timeout $_timeout $_custom_sync_cmd
 _ret=$?
 $_post_sync
 
