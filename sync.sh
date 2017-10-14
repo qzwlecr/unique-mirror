@@ -21,7 +21,7 @@ function _usage () {
 EOF
 }
 
-if [ "$1" == "" ]; then
+if [[ $1 == "" ]]; then
     _usage
     exit 4
 fi
@@ -31,7 +31,7 @@ if whoami | grep -v '^root$' > /dev/null; then
     exit 4
 fi
 
-if [ ! -f config/$1.conf ]; then
+if [[ ! -f config/$1.conf ]]; then
     echo 'Can not find config file.'
     exit 4
 fi
@@ -39,7 +39,7 @@ fi
 source config/$1.conf
 _name=$1
 
-if [ $_initok -eq 0 ]; then
+if [[ $_initok -eq 0 ]]; then
     echo 'This is initial pull without timeout limitation.'
     _timeout='30d'
     _msg_syncing='Initing'
@@ -55,7 +55,7 @@ fi
 
 cd implement
 ./lockmgr.sh acquire $_name
-if [ $? -ne 0 ]
+if [[ $? -ne 0 ]]
 then
     echo 'Another instance is running. Existing...'
     exit 1
@@ -71,10 +71,10 @@ _shToUse="$_synctool.sh"
 _ret=$?
 $_post_sync
 
-if [ $_ret -eq 0 ]; then
+if [[ $_ret -eq 0 ]]; then
     echo 'Succeeded.'
     ./set_status.fish $_name $_msg_success
-elif [ $_ret -eq 124 ]; then
+elif [[ $_ret -eq 124 ]]; then
     echo 'Sync failed because of timing out.'
     ./set_status.fish $_name $_msg_failed
 else
